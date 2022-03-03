@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/JohanSabino/apiPractice/rest_api/server"
 	"log"
 )
 
