@@ -9,15 +9,24 @@ import (
 func index(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		fmt.Fprintf(w, "Method not allowed")
+		_, err := fmt.Fprintf(w, "Method not allowed")
+		if err != nil {
+			return
+		}
 		return
 	}
-	fmt.Fprintf(w, "First time using http library %s", "visitor")
+	_, err := fmt.Fprintf(w, "First time using http library %s", "visitor")
+	if err != nil {
+		return
+	}
 }
 
 func getCountries(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(countries)
+	err := json.NewEncoder(w).Encode(countries)
+	if err != nil {
+		return
+	}
 }
 
 func addCountries(w http.ResponseWriter, r *http.Request) {
@@ -25,10 +34,16 @@ func addCountries(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(country)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "%v", err)
+		_, err := fmt.Fprintf(w, "%v", err)
+		if err != nil {
+			return
+		}
 		return
 	}
 
 	countries = append(countries, country)
-	fmt.Fprintf(w, "Country was added")
+	_, err = fmt.Fprintf(w, "Country was added")
+	if err != nil {
+		return
+	}
 }
